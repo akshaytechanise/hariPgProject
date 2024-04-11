@@ -8,7 +8,7 @@ import {
   Text,
 } from 'react-native';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 //import ButtonComponent from "@app/components / CustomButton";
 import { COLORS, SIZE, resHeight, resWidth } from './theams';
 
@@ -19,14 +19,27 @@ type infoType = {
 const CameraComponent = (props: infoType) => {
   const { photoUpdateFunction, isLoading } = props;
   const devices: any = useCameraDevices();
-  const device = devices.back;
+  const backCamera = devices.find((device: { type: string; }) => device.type === 'back'); // Find the back camera device
+  const device = backCamera || devices[0]; // Use the first device if no back camera is found
   const camera = useRef<Camera>(null);
   const [imageData, setImageData] = useState('');
   const [takePhoto, setTakePhoto] = useState(false);
 
+  useEffect(() => {
+    console.log("camera component")
+    console.log("device", device)
+  }, [device]);
+
+  useEffect(() => {
+    console.log("camera component")
+    console.log("device", device)
+    console.log("devices.back", devices.back)
+  }, [])
+
   if (device == null) return <ActivityIndicator />;
 
   const takePicture = async () => {
+    console.log("on take picture")
     if (camera.current) {
       try {
         const photo = await camera.current.takePhoto();

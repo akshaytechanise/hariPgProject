@@ -19,6 +19,7 @@ export const styles = StyleSheet.create({
   text: {
     fontSize: 27,
     marginVertical: 29,
+    color: "black"
   },
   button: {
     width: 150,
