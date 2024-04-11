@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 
 export const styles = StyleSheet.create({
@@ -6,5 +6,30 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  logoContainer: {
+    // alignItems: 'center',
+  },
+  logo: {
+    width: 300,
+    height: 300,
+    resizeMode: 'contain',
+
+  },
+  text: {
+    fontSize: 27,
+    marginVertical: 29,
+  },
+  button: {
+    width: 150,
+    height: 60,
+    backgroundColor: '#3366ff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+  },
+  buttonText: {
+    fontSize: 20,
+    color: 'white',
   },
 });

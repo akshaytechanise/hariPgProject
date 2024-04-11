@@ -1,4 +1,4 @@
-import {Camera, useCameraDevices} from 'react-native-vision-camera';
+import { Camera, useCameraDevices } from 'react-native-vision-camera';
 import {
   View,
   ActivityIndicator,
@@ -8,16 +8,16 @@ import {
   Text,
 } from 'react-native';
 
-import React, {useRef, useState} from 'react';
-// import ButtonComponent from "@app/components/CustomButton";
-import {COLORS, SIZE, resHeight, resWidth} from './theams';
+import React, { useRef, useState } from 'react';
+//import ButtonComponent from "@app/components / CustomButton";
+import { COLORS, SIZE, resHeight, resWidth } from './theams';
 
 type infoType = {
   photoUpdateFunction: (value: any) => void;
   isLoading: boolean;
 };
 const CameraComponent = (props: infoType) => {
-  const {photoUpdateFunction, isLoading} = props;
+  const { photoUpdateFunction, isLoading } = props;
   const devices: any = useCameraDevices();
   const device = devices.back;
   const camera = useRef<Camera>(null);
@@ -33,11 +33,13 @@ const CameraComponent = (props: infoType) => {
         setImageData(photo.path);
         setTakePhoto(true);
         console.log('Photo details', photo);
+
         // const saveFolder = RNFS.DocumentDirectoryPath;
         // const fileName = `photo_${Date.now()}.jpg`;
         // const destPath = `${saveFolder}/${fileName}`;
         // await RNFS.moveFile(photo.path, destPath);
-        // setImageData(destPath);
+
+        //setImageData(destPath);
       } catch (err) {
         console.error('errorrrrr', err);
       }
@@ -45,7 +47,7 @@ const CameraComponent = (props: infoType) => {
   };
   console.log('LoadingStatus', isLoading);
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       {!takePhoto ? (
         <View style={styles.container}>
           <Camera
@@ -62,7 +64,7 @@ const CameraComponent = (props: infoType) => {
       ) : (
         <View style={styles.imageViewContainer}>
           <Image
-            source={{uri: `file://${imageData}`}}
+            source={{ uri: `file://${imageData}` }}
             style={styles.imageStyle}
             resizeMode={'cover'}
           />
@@ -78,7 +80,7 @@ const CameraComponent = (props: infoType) => {
 export default CameraComponent;
 
 const styles = StyleSheet.create({
-  container: {flex: 1, flexGrow: 100},
+  container: { flex: 1, flexGrow: 100 },
   imageViewContainer: {
     alignItems: 'center',
     justifyContent: 'center',
