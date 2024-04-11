@@ -37,6 +37,7 @@ const CameraComponent = (props: infoType) => {
   }, [])
 
   if (device == null) return <ActivityIndicator />;
+  // if (devices.length === 0 || backCamera === undefined) return <ActivityIndicator />;
 
   const takePicture = async () => {
     console.log("on take picture")
@@ -57,6 +58,10 @@ const CameraComponent = (props: infoType) => {
         console.error('errorrrrr', err);
       }
     }
+  };
+  const retakePicture = () => {
+    setTakePhoto(false);
+    setImageData('');
   };
   console.log('LoadingStatus', isLoading);
   return (
@@ -81,10 +86,25 @@ const CameraComponent = (props: infoType) => {
             style={styles.imageStyle}
             resizeMode={'cover'}
           />
+          <View style={styles.buttonContainer}>
+            <Pressable onPress={retakePicture} style={styles.retakeButton}>
+              <Text style={styles.buttonText}>Retake</Text>
+            </Pressable>
 
-          <Pressable>
-            <Text>Upload</Text>
-          </Pressable>
+            <Pressable
+              // onPress={handleUpload}
+              onPress={() => console.log('Image Path:',)}
+              style={({ pressed }) => [
+                styles.uploadButton,
+                {
+                  backgroundColor: pressed ? 'rgba(0, 0, 0, 0.2)' : 'blue', // Change color when pressed
+                },
+              ]}
+            >
+              <Text style={styles.uploadButtonText}>Upload</Text>
+            </Pressable>
+
+          </View>
         </View>
       )}
     </View>
@@ -97,6 +117,7 @@ const styles = StyleSheet.create({
   imageViewContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 13
   },
   imageStyle: {
     height: resHeight(SIZE.width - 20),
@@ -104,6 +125,24 @@ const styles = StyleSheet.create({
     borderRadius: resWidth((SIZE.width - 20) / 2),
     borderWidth: resWidth(4),
     borderColor: COLORS.primary,
+  },
+  buttonContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  retakeButton: {
+    backgroundColor: COLORS.primary,
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+    marginTop: 50,
+    width: 100,
+    height: 50
+  },
+  buttonText: {
+    color: COLORS.white,
+    textAlign: 'center',
+    fontSize: 18,
   },
   buttonStyle: {
     marginTop: resHeight(20),
@@ -116,6 +155,18 @@ const styles = StyleSheet.create({
   },
   retakeButtonTextStyle: {
     color: COLORS.primary,
+  },
+  uploadButton: {
+    backgroundColor: 'blue',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  uploadButtonText: {
+    color: 'white',
+    fontSize: 16,
   },
 
   photoButton: {
