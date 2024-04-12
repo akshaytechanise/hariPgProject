@@ -1,4 +1,4 @@
-import { Camera, useCameraDevices } from 'react-native-vision-camera';
+import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import {
   View,
   ActivityIndicator,
@@ -8,39 +8,42 @@ import {
   Text,
 } from 'react-native';
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 //import ButtonComponent from "@app/components / CustomButton";
-import { COLORS, SIZE, resHeight, resWidth } from './theams';
+import {COLORS, SIZE, resHeight, resWidth} from './theams';
 
 type infoType = {
   photoUpdateFunction: (value: any) => void;
   isLoading: boolean;
+  frameProcessor: any;
 };
 const CameraComponent = (props: infoType) => {
-  const { photoUpdateFunction, isLoading } = props;
+  const {photoUpdateFunction, isLoading, frameProcessor} = props;
   const devices: any = useCameraDevices();
-  const backCamera = devices.find((device: { type: string; }) => device.type === 'back'); // Find the back camera device
+  const backCamera = devices.find(
+    (device: {type: string}) => device.type === 'back',
+  ); // Find the back camera device
   const device = backCamera || devices[0]; // Use the first device if no back camera is found
   const camera = useRef<Camera>(null);
   const [imageData, setImageData] = useState('');
   const [takePhoto, setTakePhoto] = useState(false);
 
   useEffect(() => {
-    console.log("camera component")
-    console.log("device", device)
+    console.log('camera component');
+    console.log('device', device);
   }, [device]);
 
   useEffect(() => {
-    console.log("camera component")
-    console.log("device", device)
-    console.log("devices.back", devices.back)
-  }, [])
+    console.log('camera component');
+    console.log('device', device);
+    console.log('devices.back', devices.back);
+  }, []);
 
   if (device == null) return <ActivityIndicator />;
   // if (devices.length === 0 || backCamera === undefined) return <ActivityIndicator />;
 
   const takePicture = async () => {
-    console.log("on take picture")
+    console.log('on take picture');
     if (camera.current) {
       try {
         const photo = await camera.current.takePhoto();
@@ -65,7 +68,7 @@ const CameraComponent = (props: infoType) => {
   };
   console.log('LoadingStatus', isLoading);
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       {!takePhoto ? (
         <View style={styles.container}>
           <Camera
@@ -74,6 +77,8 @@ const CameraComponent = (props: infoType) => {
             device={device}
             isActive={true}
             photo={true}
+            frameProcessor={frameProcessor}
+            pixelFormat="yuv"
           />
           <Pressable
             onPress={takePicture}
@@ -82,7 +87,7 @@ const CameraComponent = (props: infoType) => {
       ) : (
         <View style={styles.imageViewContainer}>
           <Image
-            source={{ uri: `file://${imageData}` }}
+            source={{uri: `file://${imageData}`}}
             style={styles.imageStyle}
             resizeMode={'cover'}
           />
@@ -93,17 +98,15 @@ const CameraComponent = (props: infoType) => {
 
             <Pressable
               // onPress={handleUpload}
-              onPress={() => console.log('Image Path:',)}
-              style={({ pressed }) => [
+              onPress={() => console.log('Image Path:')}
+              style={({pressed}) => [
                 styles.uploadButton,
                 {
                   backgroundColor: pressed ? 'rgba(0, 0, 0, 0.2)' : 'blue', // Change color when pressed
                 },
-              ]}
-            >
+              ]}>
               <Text style={styles.uploadButtonText}>Upload</Text>
             </Pressable>
-
           </View>
         </View>
       )}
@@ -113,11 +116,11 @@ const CameraComponent = (props: infoType) => {
 export default CameraComponent;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, flexGrow: 100 },
+  container: {flex: 1, flexGrow: 100},
   imageViewContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 13
+    marginTop: 13,
   },
   imageStyle: {
     height: resHeight(SIZE.width - 20),
@@ -137,7 +140,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 50,
     width: 100,
-    height: 50
+    height: 50,
   },
   buttonText: {
     color: COLORS.white,

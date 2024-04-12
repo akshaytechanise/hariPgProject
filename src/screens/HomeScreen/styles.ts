@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
 export const styles = StyleSheet.create({
@@ -14,12 +14,11 @@ export const styles = StyleSheet.create({
     width: 300,
     height: 300,
     resizeMode: 'contain',
-
   },
   text: {
     fontSize: 27,
     marginVertical: 29,
-    color: "black"
+    color: 'black',
   },
   button: {
     width: 150,
@@ -28,6 +27,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
+    margin: 10,
   },
   buttonText: {
     fontSize: 20,
