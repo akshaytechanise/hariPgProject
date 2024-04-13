@@ -50,7 +50,31 @@ const useHomeHook = () => {
   const decodeResult = async (data: any) => {
     const result: any = actualModel?.runSync([data]);
 
-    const outputTensor = result[0]; // Access the tensor
+    const outputTensor = result[0];
+    // Define your class labels array
+    const classLabels: string[] = ["NORMAL", "PRE-CANCER", "ORAL-CANCER"]; // Replace with your actual class labels
+
+    // Find the maximum value and its index
+    let maxIndex = 0;
+    let maxValue = outputTensor[0];
+    for (let i = 1; i < outputTensor.length; i++) {
+      if (outputTensor[i] > maxValue) {
+        maxIndex = i;
+        maxValue = outputTensor[i];
+      }
+    }
+
+    // Get the corresponding class label
+    const maxClass = classLabels[maxIndex];
+
+    console.log("Confidence:", maxValue);
+    //console.log("Index of maximum value:", maxIndex);
+    console.log("prediction:", maxClass);
+    // console.log('FINAL RESULT', Alldetections);
+    console.log('out', outputTensor)
+
+
+    // Access the tensor
     // const numDetections = 8400; // Total number of predictions
     //const Alldetections = [];
     // for (let i = 0; i < numDetections; i++) {
@@ -65,8 +89,7 @@ const useHomeHook = () => {
     //     score: confidenceForclass1,
     //   });
     // }
-    // console.log('FINAL RESULT', Alldetections);
-    console.log('out', outputTensor)
+
   };
 
   const convertImageToRGB = async (path: string) => {
@@ -75,15 +98,17 @@ const useHomeHook = () => {
     let blue = [];
     let green = [];
     for (let index = 0; index < convertedArray.length; index += 3) {
-      red.push(convertedArray[index] / 255);
-      green.push(convertedArray[index + 1] / 255);
-      blue.push(convertedArray[index + 2] / 255);
+      red.push(convertedArray[index]);
+      green.push(convertedArray[index + 1]);
+      blue.push(convertedArray[index + 2]);
     }
     const finalArray = [...red, ...green, ...blue];
     //convert to Uint8 array buffer (but some models require float32 format)
-    const arrayBuffer = new Uint8Array(finalArray);
+    const arrayBuffer = new Float32Array(finalArray);
 
     // console.log('CONVERT RGB RESULT===', arrayBuffer);
+    // Convert Uint8Array to Float32Array
+
 
     return arrayBuffer;
   };

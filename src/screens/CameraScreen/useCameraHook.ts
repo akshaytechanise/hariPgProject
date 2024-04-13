@@ -1,12 +1,12 @@
-import {View, Text} from 'react-native';
-import React, {useEffect} from 'react';
+import { View, Text } from 'react-native';
+import React, { useEffect } from 'react';
 import {
   Tensor,
   TensorflowModel,
   useTensorflowModel,
 } from 'react-native-fast-tflite';
-import {useFrameProcessor} from 'react-native-vision-camera';
-import {useResizePlugin} from 'vision-camera-resize-plugin';
+import { useFrameProcessor } from 'react-native-vision-camera';
+import { useResizePlugin } from 'vision-camera-resize-plugin';
 
 function tensorToString(tensor: Tensor): string {
   return `\n  - ${tensor.dataType} ${tensor.name}[${tensor.shape}]`;
@@ -21,8 +21,8 @@ function modelToString(model: TensorflowModel): string {
 }
 
 const useCameraHook = () => {
-  const {resize} = useResizePlugin();
-  const model = useTensorflowModel(require('../../assets/efficientdet.tflite')); //model path
+  const { resize } = useResizePlugin();
+  const model = useTensorflowModel(require('../../assets/resnet.tflite')); //model path
   const actualModel = model.state === 'loaded' ? model.model : undefined;
 
   console.log('actualModel====', actualModel);
@@ -57,7 +57,7 @@ const useCameraHook = () => {
     [actualModel],
   );
 
-  return {frameProcessor};
+  return { frameProcessor };
 };
 
 export default useCameraHook;
