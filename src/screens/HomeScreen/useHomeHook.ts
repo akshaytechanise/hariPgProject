@@ -1,19 +1,19 @@
-import {View, Text} from 'react-native';
-import React, {useEffect} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import { View, Text } from 'react-native';
+import React, { useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import {
   cameraPermisionServices,
   galleryPermissionServices,
 } from '../../services/permission';
 import ImagePicker from 'react-native-image-crop-picker';
-import {SIZE} from '../../components/theams';
+import { SIZE } from '../../components/theams';
 import {
   useTensorflowModel,
   TensorflowModel,
   Tensor,
 } from 'react-native-fast-tflite';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
-import {convertToRGB} from 'react-native-image-to-rgb';
+import { convertToRGB } from 'react-native-image-to-rgb';
 
 function tensorToString(tensor: Tensor): string {
   return `\n  - ${tensor.dataType} ${tensor.name}[${tensor.shape}]`;
@@ -59,8 +59,9 @@ const useHomeHook = () => {
       const width = outputTensor[i + 8400 * 2];
       const height = outputTensor[i + 8400 * 3];
       const confidenceForclass1 = outputTensor[i + 8400 * 4];
+      // console.log
       Alldetections.push({
-        boundingBox: {x, y, width, height},
+        boundingBox: { x, y, width, height },
         score: confidenceForclass1,
       });
     }
@@ -97,7 +98,7 @@ const useHomeHook = () => {
         0,
         undefined,
         true,
-        {mode: 'stretch'},
+        { mode: 'stretch' },
       );
       console.log(response.height, 'x', response.width, ' img');
       return response.uri;
@@ -134,7 +135,7 @@ const useHomeHook = () => {
     }
   };
 
-  return {onClickCamera, onClickGallery};
+  return { onClickCamera, onClickGallery };
 };
 
 export default useHomeHook;

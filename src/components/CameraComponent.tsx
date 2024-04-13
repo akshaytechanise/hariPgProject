@@ -1,4 +1,4 @@
-import {Camera, useCameraDevices} from 'react-native-vision-camera';
+import { Camera, useCameraDevices } from 'react-native-vision-camera';
 import {
   View,
   ActivityIndicator,
@@ -8,9 +8,10 @@ import {
   Text,
 } from 'react-native';
 
-import React, {useRef, useState, useEffect} from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 //import ButtonComponent from "@app/components / CustomButton";
-import {COLORS, SIZE, resHeight, resWidth} from './theams';
+import { COLORS, SIZE, resHeight, resWidth } from './theams';
+import { useNavigation } from '@react-navigation/native';
 
 type infoType = {
   photoUpdateFunction: (value: any) => void;
@@ -18,10 +19,11 @@ type infoType = {
   frameProcessor: any;
 };
 const CameraComponent = (props: infoType) => {
-  const {photoUpdateFunction, isLoading, frameProcessor} = props;
+  const { photoUpdateFunction, isLoading, frameProcessor } = props;
   const devices: any = useCameraDevices();
+  const navigation = useNavigation();
   const backCamera = devices.find(
-    (device: {type: string}) => device.type === 'back',
+    (device: { type: string }) => device.type === 'back',
   ); // Find the back camera device
   const device = backCamera || devices[0]; // Use the first device if no back camera is found
   const camera = useRef<Camera>(null);
@@ -66,9 +68,14 @@ const CameraComponent = (props: infoType) => {
     setTakePhoto(false);
     setImageData('');
   };
+
+  const cancelCamera = () => {
+    navigation.goBack(); // Navigate back to previous screen
+  };
+
   console.log('LoadingStatus', isLoading);
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       {!takePhoto ? (
         <View style={styles.container}>
           <Camera
@@ -87,7 +94,7 @@ const CameraComponent = (props: infoType) => {
       ) : (
         <View style={styles.imageViewContainer}>
           <Image
-            source={{uri: `file://${imageData}`}}
+            source={{ uri: `file://${imageData}` }}
             style={styles.imageStyle}
             resizeMode={'cover'}
           />
@@ -99,13 +106,17 @@ const CameraComponent = (props: infoType) => {
             <Pressable
               // onPress={handleUpload}
               onPress={() => console.log('Image Path:')}
-              style={({pressed}) => [
+              style={({ pressed }) => [
                 styles.uploadButton,
                 {
                   backgroundColor: pressed ? 'rgba(0, 0, 0, 0.2)' : 'blue', // Change color when pressed
                 },
               ]}>
-              <Text style={styles.uploadButtonText}>Upload</Text>
+              <Text style={styles.buttonText}>Upload</Text>
+            </Pressable>
+
+            <Pressable onPress={cancelCamera} style={styles.cancelButton}>
+              <Text style={styles.buttonText}>Cancel</Text>
             </Pressable>
           </View>
         </View>
@@ -116,7 +127,7 @@ const CameraComponent = (props: infoType) => {
 export default CameraComponent;
 
 const styles = StyleSheet.create({
-  container: {flex: 1, flexGrow: 100},
+  container: { flex: 1, flexGrow: 100 },
   imageViewContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -133,15 +144,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignItems: 'center',
   },
-  retakeButton: {
-    backgroundColor: COLORS.primary,
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 10,
-    marginTop: 50,
-    width: 100,
-    height: 50,
-  },
+
   buttonText: {
     color: COLORS.white,
     textAlign: 'center',
@@ -159,17 +162,40 @@ const styles = StyleSheet.create({
   retakeButtonTextStyle: {
     color: COLORS.primary,
   },
+  retakeButton: {
+    backgroundColor: COLORS.primary,
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+    marginTop: 50,
+    width: 100,
+    height: 50,
+  },
   uploadButton: {
-    backgroundColor: 'blue',
+    backgroundColor: COLORS.primary,
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
+    marginBottom: 10,
+    width: 100,
+    height: 50,
   },
   uploadButtonText: {
     color: 'white',
     fontSize: 16,
+  },
+  cancelButton: {
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+    marginBottom: 10,
+    width: 150,
+    height: 50,
   },
 
   photoButton: {
