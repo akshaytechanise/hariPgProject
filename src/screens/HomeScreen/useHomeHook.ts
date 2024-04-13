@@ -29,7 +29,7 @@ function modelToString(model: TensorflowModel): string {
 
 const useHomeHook = () => {
   const navigation: any = useNavigation();
-  const model = useTensorflowModel(require('../../assets/efficientdet.tflite')); //model path
+  const model = useTensorflowModel(require('../../assets/resnet.tflite')); //model path
   const actualModel = model.state === 'loaded' ? model.model : undefined;
 
   console.log('actualModel====', actualModel);
@@ -51,21 +51,22 @@ const useHomeHook = () => {
     const result: any = actualModel?.runSync([data]);
 
     const outputTensor = result[0]; // Access the tensor
-    const numDetections = 8400; // Total number of predictions
-    const Alldetections = [];
-    for (let i = 0; i < numDetections; i++) {
-      const x = outputTensor[i];
-      const y = outputTensor[i + 8400 * 1];
-      const width = outputTensor[i + 8400 * 2];
-      const height = outputTensor[i + 8400 * 3];
-      const confidenceForclass1 = outputTensor[i + 8400 * 4];
-      // console.log
-      Alldetections.push({
-        boundingBox: { x, y, width, height },
-        score: confidenceForclass1,
-      });
-    }
-    console.log('FINAL RESULT', Alldetections);
+    // const numDetections = 8400; // Total number of predictions
+    //const Alldetections = [];
+    // for (let i = 0; i < numDetections; i++) {
+    //   const x = outputTensor[i];
+    //   const y = outputTensor[i + 8400 * 1];
+    //   const width = outputTensor[i + 8400 * 2];
+    //   const height = outputTensor[i + 8400 * 3];
+    //   const confidenceForclass1 = outputTensor[i + 8400 * 4];
+    //   // console.log
+    //   Alldetections.push({
+    //     boundingBox: { x, y, width, height },
+    //     score: confidenceForclass1,
+    //   });
+    // }
+    // console.log('FINAL RESULT', Alldetections);
+    console.log('out', outputTensor)
   };
 
   const convertImageToRGB = async (path: string) => {
@@ -113,8 +114,8 @@ const useHomeHook = () => {
     if (permisionResult) {
       console.log('OPEN GALLERY');
       await ImagePicker.openPicker({
-        width: 320,
-        height: 320,
+        width: 224,
+        height: 224,
         cropping: true,
         mediaType: 'photo',
       })
@@ -123,7 +124,7 @@ const useHomeHook = () => {
           // imageUpdateFunction(image);
           console.log('IMAGE DATA====', image);
 
-          const resized: any = await resizeImage(image?.path, 320, 320);
+          const resized: any = await resizeImage(image?.path, 224, 224);
           console.log('IMAGE RESIZE====', resized);
           const rgbResult = await convertImageToRGB(resized);
           decodeResult(rgbResult);
