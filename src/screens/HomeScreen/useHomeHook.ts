@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import {
   cameraPermisionServices,
@@ -14,6 +14,8 @@ import {
 } from 'react-native-fast-tflite';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
 import { convertToRGB } from 'react-native-image-to-rgb';
+import Result from '../ResultScreen/result';
+
 
 function tensorToString(tensor: Tensor): string {
   return `\n  - ${tensor.dataType} ${tensor.name}[${tensor.shape}]`;
@@ -29,6 +31,10 @@ function modelToString(model: TensorflowModel): string {
 
 const useHomeHook = () => {
   const navigation: any = useNavigation();
+
+  const [predictedClass, setPredictedClass] = useState('');
+  const [imageSource, setImageSource] = useState<string | null>(null);
+
   const model = useTensorflowModel(require('../../assets/resnet.tflite')); //model path
   const actualModel = model.state === 'loaded' ? model.model : undefined;
 
@@ -74,21 +80,10 @@ const useHomeHook = () => {
     console.log('out', outputTensor)
 
 
-    // Access the tensor
-    // const numDetections = 8400; // Total number of predictions
-    //const Alldetections = [];
-    // for (let i = 0; i < numDetections; i++) {
-    //   const x = outputTensor[i];
-    //   const y = outputTensor[i + 8400 * 1];
-    //   const width = outputTensor[i + 8400 * 2];
-    //   const height = outputTensor[i + 8400 * 3];
-    //   const confidenceForclass1 = outputTensor[i + 8400 * 4];
-    //   // console.log
-    //   Alldetections.push({
-    //     boundingBox: { x, y, width, height },
-    //     score: confidenceForclass1,
-    //   });
-    // }
+    setPredictedClass(maxClass);
+
+
+    navigation.navigate('Result', { predictedClass, imageSource });
 
   };
 
@@ -148,11 +143,16 @@ const useHomeHook = () => {
           // setIsEditVisible(false);
           // imageUpdateFunction(image);
           console.log('IMAGE DATA====', image);
+          //***************//
+          setImageSource(image.path);
+          //***************//
 
           const resized: any = await resizeImage(image?.path, 224, 224);
           console.log('IMAGE RESIZE====', resized);
           const rgbResult = await convertImageToRGB(resized);
           decodeResult(rgbResult);
+
+
         })
         .catch(err => {
           console.log('Gallery error', err);
@@ -161,7 +161,7 @@ const useHomeHook = () => {
     }
   };
 
-  return { onClickCamera, onClickGallery };
+  return { onClickCamera, onClickGallery, predictedClass, imageSource };
 };
 
 export default useHomeHook;

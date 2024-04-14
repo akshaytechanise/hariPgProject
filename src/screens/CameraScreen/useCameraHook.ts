@@ -7,6 +7,7 @@ import {
 } from 'react-native-fast-tflite';
 import { useFrameProcessor } from 'react-native-vision-camera';
 import { useResizePlugin } from 'vision-camera-resize-plugin';
+import result from '../ResultScreen/result';
 
 function tensorToString(tensor: Tensor): string {
   return `\n  - ${tensor.dataType} ${tensor.name}[${tensor.shape}]`;
