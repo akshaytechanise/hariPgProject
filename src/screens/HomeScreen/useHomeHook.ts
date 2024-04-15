@@ -58,7 +58,7 @@ const useHomeHook = () => {
 
     const outputTensor = result[0];
     // Define your class labels array
-    const classLabels: string[] = ["NORMAL", "PRE-CANCER", "ORAL-CANCER"]; // Replace with your actual class labels
+    const classLabels: string[] = ["NORMAL", "ORAL-CANCER", "PRE-CANCER"]; // Replace with your actual class labels
 
     // Find the maximum value and its index
     let maxIndex = 0;
@@ -80,10 +80,8 @@ const useHomeHook = () => {
     console.log('out', outputTensor)
 
 
-    setPredictedClass(maxClass);
+    return maxClass
 
-
-    navigation.navigate('Result', { predictedClass, imageSource });
 
   };
 
@@ -131,6 +129,8 @@ const useHomeHook = () => {
 
   const onClickGallery = async () => {
     const permisionResult = await galleryPermissionServices();
+
+
     if (permisionResult) {
       console.log('OPEN GALLERY');
       await ImagePicker.openPicker({
@@ -143,15 +143,19 @@ const useHomeHook = () => {
           // setIsEditVisible(false);
           // imageUpdateFunction(image);
           console.log('IMAGE DATA====', image);
-          //***************//
-          setImageSource(image.path);
-          //***************//
+
 
           const resized: any = await resizeImage(image?.path, 224, 224);
           console.log('IMAGE RESIZE====', resized);
+          //***************//
+          //***************//
           const rgbResult = await convertImageToRGB(resized);
-          decodeResult(rgbResult);
+          const predictedClass = await decodeResult(rgbResult);
 
+          // Navigate to the result screen with the predicted class and image source as route parameters
+          console.log("predictedClass", predictedClass)
+          console.log("resized", resized)
+          navigation.navigate('Result', { predictedClass, imageSource: resized });
 
         })
         .catch(err => {
@@ -161,7 +165,7 @@ const useHomeHook = () => {
     }
   };
 
-  return { onClickCamera, onClickGallery, predictedClass, imageSource };
+  return { onClickCamera, onClickGallery, };
 };
 
 export default useHomeHook;

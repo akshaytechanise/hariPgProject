@@ -1,17 +1,17 @@
-import {View, Text} from 'react-native';
-import React, {useEffect} from 'react';
+import { View, Text } from 'react-native';
+import React, { useEffect } from 'react';
 import CameraComponent from '../../components/CameraComponent';
-import {styles} from './styles';
+import { styles } from './styles';
 import useCameraHook from './useCameraHook';
 
 const CameraScreen = () => {
-  const {frameProcessor} = useCameraHook();
+  const { frameProcessor } = useCameraHook();
 
   return (
     <View style={styles.container}>
       <CameraComponent
         frameProcessor={frameProcessor}
-        photoUpdateFunction={() => {}}
+        photoUpdateFunction={() => { }}
         isLoading={false}
       />
     </View>

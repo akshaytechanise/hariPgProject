@@ -15,7 +15,7 @@ const Navigation = () => {
         screenOptions={{ headerShown: false, gestureEnabled: true }}>
         <Stack.Screen name={'HomeScreen'} component={HomeScreen} />
         <Stack.Screen name={'CameraScreen'} component={CameraScreen} />
-
+        <Stack.Screen name={'Result'} component={Result} />
       </Stack.Navigator>
     </React.Fragment>
   );
